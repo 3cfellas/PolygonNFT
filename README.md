@@ -32,60 +32,135 @@ The contract supports the following features:
 - `_msgSender()`: This function returns the original sender of the transaction. It is overridden to support metatransactions.
 - `_msgData()`: This function returns the calldata of the transaction. It is overridden to support metatransactions.
 
-## Development
+# Development
 
-### Prerequisites
+In this section, we will cover the requirements and steps to set up a local development environment, how to compile and test the contract, and how to interact with it using Hardhat or Remix IDE. This guide assumes a basic familiarity with Ethereum smart contracts and Solidity.
 
-The following tools are required to compile and test the contract:
+## Prerequisites
 
-- Node.js and npm
-- Hardhat
-- ethers.js
-- openzeppelin contracts
-- Remix IDE
+1. **Node.js and npm:** Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine, and npm is the package manager for Node.js. You can download Node.js and npm [here](https://nodejs.org/en/download/). 
 
-### Installation
+2. **Hardhat:** Hardhat is a development environment to compile, deploy, test, and debug your Ethereum software. It helps developers manage and automate the recurring tasks that are inherent to the process of building smart contracts and blockchain solutions. Install Hardhat globally using npm:
 
-1. Create a new project folder and initialize it with npm:
+```sh
+npm install --global hardhat
+```
+
+3. **Ethers.js:** Ethers.js is a library that makes it easier to interact with the Ethereum blockchain. Install it using npm:
+
+```sh
+npm install --save ethers
+```
+
+4. **OpenZeppelin Contracts:** OpenZeppelin Contracts is a library for secure smart contract development. Install it using npm:
+
+```sh
+npm install @openzeppelin/contracts
+```
+
+5. **Remix IDE:** Remix is a powerful, open-source tool that helps you write Solidity contracts straight from the browser. It is used for smart contract development, debugging, testing and deployment. You can access it [here](https://remix.ethereum.org/).
+
+## Setup
+
+After installing the prerequisites, follow these steps:
+
+1. Create a new project folder:
 
 ```sh
 mkdir nft-tutorial
 cd nft-tutorial
+```
+
+2. Initialize the project with npm:
+
+```sh
 npm init
 ```
 
-2. Install the required dependencies:
+3. Install the project dependencies:
 
 ```sh
 npm install --save-dev hardhat @nomiclabs/hardhat-ethers @nomiclabs/hardhat-etherscan @openzeppelin/contracts dotenv [email protected]^5.0.0 [email protected]
 ```
 
-3. Initialize Hardhat:
+4. Initialize Hardhat in your project:
 
 ```sh
 npx hardhat
 ```
 
-### Testing
+This will create a `hardhat.config.js` file in your project root, where you can configure your Hardhat setup.
 
-The contract can be tested using Hardhat's built-in testing framework.
+5. For Remix IDE, you can directly copy and paste the smart contract code into the IDE's editor. Make sure to select the correct compiler version and enable optimization in the compiler settings.
+
+## Compilation
+
+To compile the contract using Hardhat, run:
+
+```sh
+npx hardhat compile
+```
+
+This will compile all Solidity files in your project and output the artifacts into the `artifacts` directory.
+
+For Remix IDE, you can compile the contract by clicking on the "Compile" button.
+
+## Testing
+
+Write tests for your smart contract using Hardhat's testing framework, which is based on Mocha and Chai. You can run your tests with:
+
+```sh
+npx hardhat test
+```
+
+In Remix, you can write tests using Solidity or JavaScript under the "Testing" tab, and then run them.
 
 ## Deployment
 
-The contract can be deployed to any Ethereum-compatible network using Hardhat or Remix IDE. For testing purposes, you can use the Rinkeby testnet and get Rinkeby Ether from a faucet.
+In order to deploy your contract, you will need to have a wallet with some Ether. For testing purposes, you can use the Rinkeby testnet and get Rinkeby Ether from a faucet.
 
-Please note that the contract requires some initial setup after deployment, such as setting the
+In Hardhat, you can write a deployment script in the `scripts` directory and then run it with:
 
-contract URI, granting the minter role, and setting the royalty recipient.
+```sh
+npx hardhat run scripts/deploy.js
+```
 
-This contract can also be deployed on the Polygon network, a Layer 2 solution for Ethereum. Polygon provides faster and cheaper transactions compared to Ethereum's mainnet, making it a popular choice for many DeFi and NFT projects. As this contract is written in Solidity and compatible with the EVM, it can be deployed on Polygon with no modifications.
+In Remix, you can deploy the contract by going to the "Deploy & Run Transactions" tab, selecting the right environment and account, and clicking on "Deploy".
 
-Interoperability between Ethereum and Polygon is facilitated by the Polygon Bridge, which allows for the easy transfer of assets (including NFTs) between the two networks. This means that NFTs minted on Polygon can be moved to Ethereum, and vice versa.
+Remember to set up your contract after deployment
 
-## Security
+## Interacting with the Contract
 
-Keep your wallet credentials private. When creating your new MetaMask wallet, you'll be given a seed phrase of 12 randomly generated words. These words can give you (or anyone else!) access to your account to send transactions and add or remove funds from your account. Keep this seed phrase somewhere secure, and never share it on the internet. 
+After deploying the contract, you can interact with it in various ways.
+
+In Hardhat, you can use the `hardhat console` to interact with your contract. Import the contract's artifacts and the ethers library, create a new instance of the contract, and then you can call its methods:
+
+```sh
+npx hardhat console
+```
+
+```js
+const { ethers } = require("hardhat");
+const contractAddress = ""; // replace with your contract's address
+const Contract = await ethers.getContractFactory("YourContract");
+const contract = Contract.attach(contractAddress);
+
+// call a method
+const result = await contract.yourMethod();
+```
+
+In Remix, you can interact with the contract under the "Deploy & Run Transactions" tab. After deploying the contract, it will appear under the "Deployed Contracts" section. You can expand it to see the contract's methods and call them.
+
+## Polygon and Ethereum Interoperability
+
+This project is developed with Ethereum in mind, but the contract can also be deployed on the Polygon network with minor or no modifications. Polygon is a Layer 2 scaling solution for Ethereum, offering faster and cheaper transactions. It is fully compatible with the Ethereum infrastructure, which means you can use the same tools (like Hardhat, ethers.js, and Remix) and the same wallet addresses.
+
+Moreover, the NFT contract in this project uses the ERC721 standard, which is a standard interface for non-fungible tokens on Ethereum. This means it can be used on any network that supports this standard, including both Ethereum and Polygon. This allows for a wide range of interoperability, such as trading NFTs across different networks.
 
 ## License
 
-The project is licensed under the MIT license.
+This project is licensed under the MIT license, which is a permissive license that allows for reuse with few restrictions. The license allows others to copy, modify, distribute, and use the work for any purpose, including for commercial purposes, provided that they give appropriate credit and do not hold the original author liable.
+
+---
+
+This is a broad overview of the development process for this project. For more specific instructions and details, please refer to the individual files and comments in the code. If you have any questions or encounter any issues, feel free to open an issue on the project's GitHub page.
